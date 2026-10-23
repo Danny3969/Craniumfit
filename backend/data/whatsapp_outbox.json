@@ -1,0 +1,74 @@
+[
+  {
+    "id": "notif_b657b667",
+    "recipient_name": "Familia",
+    "phone": "+593 98 765 4321",
+    "notification_type": "wear_time_alert",
+    "branch": "Quito - Citimed",
+    "message": "⏱️ *Monitoreo de Adherencia 23h — CraniumFit*\n\nEstimado(a) *Familia*:\n¡Felicitaciones! Se ha registrado un tiempo de uso de *22.5 horas* hoy para el casco de *su bebé*.\n\n🎯 Cumplir la meta de 23 horas diarias asegura el máximo potencial de remodelación de la bóveda craneal.\n💪 ¡Excelente compromiso con el tratamiento!",
+    "wa_link": "https://wa.me/593987654321?text=%E2%8F%B1%EF%B8%8F%20%2AMonitoreo%20de%20Adherencia%2023h%20%E2%80%94%20CraniumFit%2A%0A%0AEstimado%28a%29%20%2AFamilia%2A%3A%0A%C2%A1Felicitaciones%21%20Se%20ha%20registrado%20un%20tiempo%20de%20uso%20de%20%2A22.5%20horas%2A%20hoy%20para%20el%20casco%20de%20%2Asu%20beb%C3%A9%2A.%0A%0A%F0%9F%8E%AF%20Cumplir%20la%20meta%20de%2023%20horas%20diarias%20asegura%20el%20m%C3%A1ximo%20potencial%20de%20remodelaci%C3%B3n%20de%20la%20b%C3%B3veda%20craneal.%0A%F0%9F%92%AA%20%C2%A1Excelente%20compromiso%20con%20el%20tratamiento%21",
+    "sent_at": "2026-10-21 16:42:31",
+    "status": "delivered_simulated"
+  },
+  {
+    "id": "notif_0ac93711",
+    "recipient_name": "Familia del Paciente",
+    "phone": "+593 98 765 4321",
+    "notification_type": "scan_ready",
+    "branch": "Quito - Citimed",
+    "message": "🔬 *Resultados de Escaneo 3D Listos — CraniumFit*\n\nEstimado(a) *Familia del Paciente*:\nEl nuevo escaneo 3D de *Lucas* ha sido procesado con éxito por el equipo médico.\n\n📊 *Índice CVAI Actual:* 0.0%\n📈 *Evolución:* \n👨‍⚕️ *Evaluado por:* Especialista CraniumFit\n\nYa puede visualizar la reconstrucción 3D comparativa ('Antes vs. Después') directamente desde su portal de padres en la app.",
+    "wa_link": "https://wa.me/593987654321?text=%F0%9F%94%AC%20%2AResultados%20de%20Escaneo%203D%20Listos%20%E2%80%94%20CraniumFit%2A%0A%0AEstimado%28a%29%20%2AFamilia%20del%20Paciente%2A%3A%0AEl%20nuevo%20escaneo%203D%20de%20%2ALucas%2A%20ha%20sido%20procesado%20con%20%C3%A9xito%20por%20el%20equipo%20m%C3%A9dico.%0A%0A%F0%9F%93%8A%20%2A%C3%8Dndice%20CVAI%20Actual%3A%2A%200.0%25%0A%F0%9F%93%88%20%2AEvoluci%C3%B3n%3A%2A%20%0A%F0%9F%91%A8%E2%80%8D%E2%9A%95%EF%B8%8F%20%2AEvaluado%20por%3A%2A%20Especialista%20CraniumFit%0A%0AYa%20puede%20visualizar%20la%20reconstrucci%C3%B3n%203D%20comparativa%20%28%27Antes%20vs.%20Despu%C3%A9s%27%29%20directamente%20desde%20su%20portal%20de%20padres%20en%20la%20app.",
+    "sent_at": "2026-10-21 16:33:11",
+    "status": "delivered_simulated"
+  },
+  {
+    "id": "notif_4339b819",
+    "recipient_name": "María Fernanda López",
+    "phone": "+593 98 765 4321",
+    "notification_type": "scan_ready",
+    "branch": "Quito - Citimed",
+    "message": "🔬 *Resultados de Escaneo 3D Listos — CraniumFit*\n\nEstimado(a) *María Fernanda López*:\nEl nuevo escaneo 3D de *Lucas* ha sido procesado con éxito por el equipo médico.\n\n📊 *Índice CVAI Actual:* 5.4%\n📈 *Evolución:* -51.8% de asimetría corregida\n👨‍⚕️ *Evaluado por:* Dr. Carlos Morales\n\nYa puede visualizar la reconstrucción 3D comparativa ('Antes vs. Después') directamente desde su portal de padres en la app.",
+    "wa_link": "https://wa.me/593987654321?text=%F0%9F%94%AC%20%2AResultados%20de%20Escaneo%203D%20Listos%20%E2%80%94%20CraniumFit%2A%0A%0AEstimado%28a%29%20%2AMar%C3%ADa%20Fernanda%20L%C3%B3pez%2A%3A%0AEl%20nuevo%20escaneo%203D%20de%20%2ALucas%2A%20ha%20sido%20procesado%20con%20%C3%A9xito%20por%20el%20equipo%20m%C3%A9dico.%0A%0A%F0%9F%93%8A%20%2A%C3%8Dndice%20CVAI%20Actual%3A%2A%205.4%25%0A%F0%9F%93%88%20%2AEvoluci%C3%B3n%3A%2A%20-51.8%25%20de%20asimetr%C3%ADa%20corregida%0A%F0%9F%91%A8%E2%80%8D%E2%9A%95%EF%B8%8F%20%2AEvaluado%20por%3A%2A%20Dr.%20Carlos%20Morales%0A%0AYa%20puede%20visualizar%20la%20reconstrucci%C3%B3n%203D%20comparativa%20%28%27Antes%20vs.%20Despu%C3%A9s%27%29%20directamente%20desde%20su%20portal%20de%20padres%20en%20la%20app.",
+    "sent_at": "2026-10-21 16:14:21",
+    "status": "delivered_simulated"
+  },
+  {
+    "id": "otp_c6314f58",
+    "recipient_name": "Test Padre Temporal",
+    "phone": "+593998877665",
+    "cedula": "1799887766",
+    "code": "978698",
+    "role": "parent",
+    "branch": "Quito - Citimed",
+    "message": "👶 *Bienvenido a CraniumFit — Quito - Citimed*\n\nEstimado(a) *Test Padre Temporal*:\nLa recepción ha registrado la ficha clínica de su bebé.\n\nSu código de activación personal para la aplicación es:\n🔑 *978698*\n\n📌 Ingrese con su número de cédula (*1799887766*) en la app para definir su contraseña y acceder al historial 3D, evolución CVAI y agendamiento.\n⏳ _Este código expira en 15 minutos._",
+    "sent_at": "2026-10-21 13:17:32",
+    "expires_at": "2026-10-21 18:32:32",
+    "status": "delivered_simulated"
+  },
+  {
+    "id": "otp_d8ef799c",
+    "recipient_name": "Carlos Daniel Viteri",
+    "phone": "+593 99 555 1234",
+    "cedula": "1729988776",
+    "code": "211629",
+    "role": "parent",
+    "branch": "Quito - Citimed",
+    "message": "👶 *Bienvenido a CraniumFit — Quito - Citimed*\n\nEstimado(a) *Carlos Daniel Viteri*:\nLa recepción ha registrado la ficha clínica de su bebé.\n\nSu código de activación personal para la aplicación es:\n🔑 *211629*\n\n📌 Ingrese con su número de cédula (*1729988776*) en la app para definir su contraseña y acceder al historial 3D, evolución CVAI y agendamiento.\n⏳ _Este código expira en 15 minutos._",
+    "sent_at": "2026-10-21 12:53:42",
+    "expires_at": "2026-10-21 18:08:42",
+    "status": "delivered_simulated"
+  },
+  {
+    "id": "otp_00e6253d",
+    "recipient_name": "Carla Morales Vintimilla",
+    "phone": "+593 99 777 8899",
+    "cedula": "1724567890",
+    "code": "751539",
+    "role": "secretary",
+    "branch": "Quito - Citimed",
+    "message": "🏥 *CraniumFit — Activación de Personal Administrativo*\n\nEstimada *Carla Morales Vintimilla*:\nSe ha creado su perfil de Secretaría en la sede *Quito - Citimed*.\n\nSu código de acceso para activación de cuenta es:\n🔑 *751539*\n\n📌 Ingrese con su cédula (*1724567890*) para establecer su clave de ingreso al sistema.",
+    "sent_at": "2026-10-21 12:52:20",
+    "expires_at": "2026-10-21 18:07:20",
+    "status": "delivered_simulated"
+  }
+]
