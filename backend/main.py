@@ -604,6 +604,80 @@ def delete_branch_api(branch_id: str):
     delete_branch_record(branch_id)
     return {"success": True, "message": f"Sede '{branch_id}' desactivada del sistema."}
 
+# ── 1.01 ARQUITECTURA MODULAR DE ESPECIALIDADES MÉDICAS ──────────────────────────
+
+@app.get("/api/system/specialties", summary="Catálogo de Especialidades Médicas Modulares")
+def get_system_specialties():
+    """Retorna el catálogo de especialidades médicas soportadas por el motor clínico universal."""
+    return {
+        "platform": "Universal HealthTech ERP / EMR Modular Engine",
+        "version": "2.4.0",
+        "active_specialty": "cranial_orthotics",
+        "specialties": [
+            {
+                "id": "cranial_orthotics",
+                "name": "Ortopedia Craneofacial & Trazabilidad 3D",
+                "code": "CRANIO-3D",
+                "brand_deployment": "CraniumFit",
+                "status": "active",
+                "icon": "brain",
+                "description": "Flujo integral para asimetrías craneales infantiles, ortesis de remodelación, cefalometría y fotogrametría 3D.",
+                "modules": ["EHR Pediátrico Especializado", "Cefalometría 3D WebGL", "Trazabilidad de Manufactura CAD/CAM", "Recetas Criptográficas", "Portal de Familias"]
+            },
+            {
+                "id": "pediatrics",
+                "name": "Pediatría & Puericultura General",
+                "code": "PEDIATRICS",
+                "brand_deployment": "Universal Health",
+                "status": "ready",
+                "icon": "baby",
+                "description": "Control de niño sano, curvas percentilares OMS (peso/talla/perímetro), esquema de inmunizaciones y dosificación por peso.",
+                "modules": ["EHR Pediátrico", "Curvas OMS Percentilares", "Control Vacunal", "Cálculo de Dosis por Peso", "Portal de Padres"]
+            },
+            {
+                "id": "traumatology",
+                "name": "Traumatología & Ortopedia General",
+                "code": "TRAUMA-ORTHO",
+                "brand_deployment": "Universal Health",
+                "status": "ready",
+                "icon": "bone",
+                "description": "Seguimiento de fracturas, trazabilidad de implantes quirúrgicos, prótesis articulares y sesiones de fisioterapia.",
+                "modules": ["EHR Traumatológico", "Trazabilidad de Implantes y Material Quirúrgico", "Visor Radiológico DICOM", "Planes de Fisioterapia"]
+            },
+            {
+                "id": "dermatology",
+                "name": "Dermatología & Cirugía Estética",
+                "code": "DERMA-AESTHETIC",
+                "brand_deployment": "Universal Health",
+                "status": "ready",
+                "icon": "sparkles",
+                "description": "Mapeo fotográfico corporal de lesiones, comparativa evolutiva antes/después y registro de procedimientos ambulatorios.",
+                "modules": ["EHR Dermatológico", "Mapeo Corporal de Nevos/Lesiones", "Comparador Fotográfico Antes/Después", "Procedimientos Láser"]
+            },
+            {
+                "id": "dentistry",
+                "name": "Odontología & Maxilofacial",
+                "code": "ODONTO-MAX",
+                "brand_deployment": "Universal Health",
+                "status": "ready",
+                "icon": "smile",
+                "description": "Odontograma digital interactivo, periodontograma, ortodoncia, implantología y presupuestos detallados por pieza.",
+                "modules": ["Odontograma Digital Interactivo", "Periodontograma", "Planes de Ortodoncia", "Presupuestos Odontológicos"]
+            },
+            {
+                "id": "general_medicine",
+                "name": "Medicina General & Familiar",
+                "code": "MED-GEN",
+                "brand_deployment": "Universal Health",
+                "status": "ready",
+                "icon": "stethoscope",
+                "description": "Consulta ambulatoria de alta eficiencia, constantes vitales universales, diagnósticos CIE-10 y receta electrónica firmada.",
+                "modules": ["EHR Universal", "CIE-10 Predictivo", "Receta Electrónica Firmada", "Facturación Fiscal SRI/SAT", "Agenda Multimédico"]
+            }
+        ]
+    }
+
+
 # ── 1.1 CONFIGURACIÓN DE EMPRESA Y FACTURACIÓN FISCAL (SRI / SUNAT) ───────────
 
 @app.get("/api/company/settings")
