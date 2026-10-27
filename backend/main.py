@@ -13,12 +13,13 @@ Endpoints para:
 import os
 import sys
 import uuid
+import random
 from typing import Optional, List, Dict, Any
 from datetime import datetime, date, timedelta
 
 import uvicorn
 from fastapi import FastAPI, Header, HTTPException, Depends, Query, status, UploadFile, File, Form
-from fastapi.responses import JSONResponse, FileResponse
+from fastapi.responses import JSONResponse, FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, EmailStr
@@ -88,6 +89,19 @@ app.add_middleware(
 # Montar directorio para servir archivos 3D reales (.stl / .obj) y firmas
 app.mount("/uploads", StaticFiles(directory=str(UPLOADS_DIR)), name="uploads")
 
+FAMILIAS_DIST_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "mobile", "craniumfit-familias", "dist"))
+PRO_DIST_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "mobile", "craniumfit-pro", "dist"))
+DOWNLOADS_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "downloads"))
+
+if os.path.exists(FAMILIAS_DIST_PATH):
+    app.mount("/app-familias", StaticFiles(directory=FAMILIAS_DIST_PATH, html=True), name="app-familias")
+
+if os.path.exists(PRO_DIST_PATH):
+    app.mount("/app-pro", StaticFiles(directory=PRO_DIST_PATH, html=True), name="app-pro")
+
+if os.path.exists(DOWNLOADS_PATH):
+    app.mount("/downloads", StaticFiles(directory=DOWNLOADS_PATH, html=True), name="downloads")
+
 # Inicializar bases de datos al arranque
 @app.on_event("startup")
 def startup_event():
@@ -95,17 +109,30 @@ def startup_event():
 
 FRONTEND_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "frontend", "index.html"))
 
-@app.get("/", summary="Servir Aplicación Web PWA")
+@app.get("/", summary="Servir Consola Web Administrativa")
 def serve_root():
     if os.path.exists(FRONTEND_PATH):
         return FileResponse(FRONTEND_PATH)
     return {"status": "ok", "message": "CraniumFit Core API is running", "docs": "/docs"}
 
-@app.get("/app", summary="Servir Aplicación Web PWA")
+@app.get("/app", summary="Servir Consola Web Administrativa")
 def serve_app():
     if os.path.exists(FRONTEND_PATH):
         return FileResponse(FRONTEND_PATH)
     return {"status": "ok", "message": "CraniumFit Core API is running", "docs": "/docs"}
+
+@app.get("/familias", summary="Redirigir a App Móvil de Familias")
+def redirect_familias():
+    return RedirectResponse(url="/app-familias/", status_code=307)
+
+@app.get("/pro", summary="Redirigir a App Móvil Pro")
+def redirect_pro():
+    return RedirectResponse(url="/app-pro/", status_code=307)
+
+@app.get("/descargas", summary="Redirigir a Centro de Descargas Móvil")
+@app.get("/instalar", summary="Redirigir a Centro de Descargas Móvil")
+def redirect_descargas():
+    return RedirectResponse(url="/downloads/", status_code=307)
 
 # Helper para resolver el branch_id
 def resolve_branch(x_branch_id: Optional[str] = Header(None)) -> str:
@@ -499,6 +526,29 @@ class EvaluateTriageRequest(BaseModel):
     doctor_notes: str
     recommendation: str
     status: str = "evaluated" # 'evaluated', 'candidate_in_person', 'mild_observation', 'discarded'
+
+class CreateManufacturingOrderRequest(BaseModel):
+    patient_id: str
+    doctor_id: Optional[str] = None
+    scan_file_name: Optional[str] = None
+    cvai_at_prescription: Optional[float] = None
+    helmet_model: str = "CraniumFit Pro-Dynamic 3D"
+    pressure_zones: Optional[str] = None
+    expansion_chambers: Optional[str] = None
+    shell_thickness_mm: float = 4.0
+    shell_material: str = "PETG Vivak Médico"
+    lining_material: str = "Espuma Plastazote Hipoalergénica"
+    closure_type: str = "Velcro con Hebilla de Seguridad"
+    color_pattern: str = "Blanco Médico Estándar"
+    clinical_priority: str = "Normal"
+    target_delivery_date: Optional[str] = None
+    total_cost: float = 850.0
+    notes: Optional[str] = None
+
+class UpdateManufacturingStatusRequest(BaseModel):
+    status: str # 'pending', 'in_fabrication', 'completed'
+    notes: Optional[str] = None
+    technician_name: Optional[str] = None
 
 class QCInspectionRequest(BaseModel):
     material_lot_shell: str
@@ -2037,6 +2087,9 @@ def get_patient_medical_history(patient_id: str, branch: str = Depends(resolve_b
                 row_dict["signature_certificate_info"] = json.loads(row_dict["signature_certificate_info"])
             except:
                 pass
+        row_dict["diagnosis_code"] = row_dict.get("diagnosis_cie10") or "Q67.3 Plagiocefalia Posicional"
+        row_dict["estimated_cost_usd"] = row_dict.get("estimated_cost") or 0.0
+        row_dict["medical_necessity_rationale"] = row_dict.get("clinical_justification") or ""
         dossiers.append(row_dict)
     
     conn.close()
@@ -2748,15 +2801,164 @@ def list_manufacturing_helmets(branch: str = Depends(resolve_branch)):
         t.*,
         p.first_name || ' ' || p.last_name as patient_name,
         p.birth_date, p.parent_name, p.parent_phone, p.diagnosis as patient_diagnosis,
-        d.full_name as doctor_name
+        d.full_name as doctor_name, d.specialty as doctor_specialty
     FROM treatments t
     JOIN patients p ON t.patient_id = p.id
     LEFT JOIN doctors d ON t.doctor_id = d.id
     ORDER BY t.created_at DESC
     """)
-    orders = [dict(r) for r in c.fetchall()]
+    orders = []
+    for r in c.fetchall():
+        od = dict(r)
+        od["status"] = od.get("manufacturing_status") or "pending"
+        orders.append(od)
     conn.close()
     return {"orders": orders, "count": len(orders)}
+
+@app.post("/api/helmets/manufacturing-orders")
+def create_helmet_manufacturing_order(req: CreateManufacturingOrderRequest, branch: str = Depends(resolve_branch)):
+    """Crea una nueva orden de fabricación de casco ortopédico emitida por el doctor desde el Laboratorio 3D."""
+    conn = get_branch_connection(branch)
+    c = conn.cursor()
+    c.execute("SELECT * FROM patients WHERE id = ?", (req.patient_id,))
+    patient = c.fetchone()
+    if not patient:
+        conn.close()
+        raise HTTPException(status_code=404, detail="Paciente no encontrado")
+
+    order_id = f"trt_{uuid.uuid4().hex[:8]}"
+    now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    serial_code = f"CF-HELM-{branch[:3].upper()}-{datetime.now().year}-{random.randint(100, 999)}"
+
+    # Fecha estimada de entrega: 5 días laborables por defecto
+    target_delivery = req.target_delivery_date or (datetime.now() + timedelta(days=5)).strftime("%Y-%m-%d")
+    p_dict = dict(patient)
+    doc_id = req.doctor_id or p_dict.get("primary_doctor_id") or p_dict.get("doctor_id") or "doc_q1"
+
+    c.execute("""
+    INSERT INTO treatments (
+        id, patient_id, doctor_id, helmet_model, manufacturing_status, start_date,
+        target_wear_hours_daily, total_cost, installments_count, installments_paid, balance_due,
+        notes, created_at, helmet_serial_code, scan_file_name, cvai_at_prescription,
+        pressure_zones, expansion_chambers, shell_thickness_mm, shell_material,
+        lining_material, closure_type, color_pattern, clinical_priority, target_delivery_date
+    ) VALUES (
+        ?, ?, ?, ?, 'pending', ?, 23, ?, 3, 1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+    )
+    """, (
+        order_id, req.patient_id, doc_id, req.helmet_model,
+        datetime.now().strftime("%Y-%m-%d"), req.total_cost, req.total_cost,
+        req.notes or "Orden de fabricación generada desde el Laboratorio 3D",
+        now_str, serial_code, req.scan_file_name, req.cvai_at_prescription,
+        req.pressure_zones or "Contención frontal y temporal contralateral",
+        req.expansion_chambers or "Cámara de vacío occipital posterior para descompresión activa",
+        req.shell_thickness_mm, req.shell_material, req.lining_material,
+        req.closure_type, req.color_pattern, req.clinical_priority, target_delivery
+    ))
+    conn.commit()
+
+    c.execute("""
+    SELECT t.*, p.first_name || ' ' || p.last_name as patient_name, d.full_name as doctor_name
+    FROM treatments t
+    JOIN patients p ON t.patient_id = p.id
+    LEFT JOIN doctors d ON t.doctor_id = d.id
+    WHERE t.id = ?
+    """, (order_id,))
+    created_order = dict(c.fetchone())
+    conn.close()
+
+    return {
+        "success": True,
+        "order_id": order_id,
+        "helmet_serial_code": serial_code,
+        "helmet_model": req.helmet_model,
+        "status": "pending",
+        "order": created_order,
+        "message": f"Orden de fabricación {serial_code} enviada al Taller con éxito."
+    }
+
+@app.get("/api/patients/{patient_id}/helmet-order")
+def get_patient_active_helmet_order(patient_id: str, branch: str = Depends(resolve_branch)):
+    """Obtiene la orden de fabricación más reciente de un paciente para mostrar su estado al doctor en el Laboratorio 3D."""
+    conn = get_branch_connection(branch)
+    c = conn.cursor()
+    c.execute("""
+    SELECT t.*, p.first_name || ' ' || p.last_name as patient_name, d.full_name as doctor_name
+    FROM treatments t
+    JOIN patients p ON t.patient_id = p.id
+    LEFT JOIN doctors d ON t.doctor_id = d.id
+    WHERE t.patient_id = ?
+    ORDER BY t.created_at DESC
+    LIMIT 1
+    """, (patient_id,))
+    row = c.fetchone()
+    conn.close()
+    if not row:
+        return {"has_order": False, "order": None}
+    od = dict(row)
+    od["status"] = od.get("manufacturing_status") or "pending"
+    return {"has_order": True, "order": od}
+
+@app.patch("/api/helmets/manufacturing-orders/{order_id}/status")
+def update_helmet_manufacturing_status(order_id: str, req: UpdateManufacturingStatusRequest, branch: str = Depends(resolve_branch)):
+    """Actualiza el estado de fabricación de la orden en el taller ('in_fabrication', 'completed', 'pending')."""
+    conn = get_branch_connection(branch)
+    c = conn.cursor()
+    c.execute("SELECT * FROM treatments WHERE id = ?", (order_id,))
+    order = c.fetchone()
+    if not order:
+        conn.close()
+        raise HTTPException(status_code=404, detail="Orden de fabricación no encontrada")
+
+    now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    new_status = req.status.lower().strip()
+
+    if new_status == "in_fabrication":
+        c.execute("""
+        UPDATE treatments
+        SET manufacturing_status = 'in_fabrication',
+            in_fabrication_at = COALESCE(in_fabrication_at, ?)
+        WHERE id = ?
+        """, (now_str, order_id))
+    elif new_status == "completed":
+        c.execute("""
+        UPDATE treatments
+        SET manufacturing_status = 'completed',
+            completed_at = COALESCE(completed_at, ?)
+        WHERE id = ?
+        """, (now_str, order_id))
+    else:
+        c.execute("UPDATE treatments SET manufacturing_status = ? WHERE id = ?", (new_status, order_id))
+
+    conn.commit()
+
+    c.execute("""
+    SELECT t.*, p.first_name || ' ' || p.last_name as patient_name, d.full_name as doctor_name
+    FROM treatments t
+    JOIN patients p ON t.patient_id = p.id
+    LEFT JOIN doctors d ON t.doctor_id = d.id
+    WHERE t.id = ?
+    """, (order_id,))
+    updated_order = dict(c.fetchone())
+    updated_order["status"] = updated_order.get("manufacturing_status") or new_status
+    conn.close()
+
+    status_labels = {
+        "pending": "En Cola de Taller",
+        "in_fabrication": "En Fabricación",
+        "completed": "Terminado"
+    }
+
+    return {
+        "success": True,
+        "status": new_status,
+        "new_status": new_status,
+        "in_fabrication_at": updated_order.get("in_fabrication_at"),
+        "completed_at": updated_order.get("completed_at"),
+        "order": updated_order,
+        "status_label": status_labels.get(new_status, new_status),
+        "message": f"Estado de fabricación actualizado a '{status_labels.get(new_status, new_status)}'."
+    }
 
 @app.post("/api/helmets/{treatment_id}/qc-inspection")
 def perform_helmet_qc_inspection(treatment_id: str, req: QCInspectionRequest, branch: str = Depends(resolve_branch)):

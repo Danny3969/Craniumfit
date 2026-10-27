@@ -856,6 +856,7 @@ def _init_branch_db(branch_id: str, branch_name: str):
     c.execute("UPDATE patients SET patient_dni = '1758921104', photo_url = 'https://images.unsplash.com/photo-1544126592-807ade215a0b?w=200&auto=format&fit=crop&q=80' WHERE id = 'pat_lucas' AND (patient_dni IS NULL OR photo_url IS NULL)")
     c.execute("UPDATE patients SET patient_dni = '1759932215', photo_url = 'https://images.unsplash.com/photo-1519689680058-324335c77eba?w=200&auto=format&fit=crop&q=80' WHERE id = 'pat_sofia' AND (patient_dni IS NULL OR photo_url IS NULL)")
     c.execute("UPDATE patients SET patient_dni = '1760043326', photo_url = 'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?w=200&auto=format&fit=crop&q=80' WHERE id = 'pat_mateo' AND (patient_dni IS NULL OR photo_url IS NULL)")
+    c.execute("UPDATE patients SET patient_dni = '1729988776', photo_url = 'https://images.unsplash.com/photo-1510154221590-ff63e90a136f?w=200&auto=format&fit=crop&q=80' WHERE id = 'pat_ccb9b9' AND photo_url IS NULL")
 
     # Migración de columnas en doctors (Firma Electrónica .p12)
     c.execute("PRAGMA table_info(doctors)")
@@ -916,6 +917,32 @@ def _init_branch_db(branch_id: str, branch_name: str):
         c.execute("ALTER TABLE treatments ADD COLUMN qc_approved_at TEXT")
     if "helmet_serial_code" not in t_cols:
         c.execute("ALTER TABLE treatments ADD COLUMN helmet_serial_code TEXT")
+    if "scan_file_name" not in t_cols:
+        c.execute("ALTER TABLE treatments ADD COLUMN scan_file_name TEXT")
+    if "cvai_at_prescription" not in t_cols:
+        c.execute("ALTER TABLE treatments ADD COLUMN cvai_at_prescription REAL")
+    if "pressure_zones" not in t_cols:
+        c.execute("ALTER TABLE treatments ADD COLUMN pressure_zones TEXT")
+    if "expansion_chambers" not in t_cols:
+        c.execute("ALTER TABLE treatments ADD COLUMN expansion_chambers TEXT")
+    if "shell_thickness_mm" not in t_cols:
+        c.execute("ALTER TABLE treatments ADD COLUMN shell_thickness_mm REAL DEFAULT 4.0")
+    if "shell_material" not in t_cols:
+        c.execute("ALTER TABLE treatments ADD COLUMN shell_material TEXT DEFAULT 'PETG Vivak Médico'")
+    if "lining_material" not in t_cols:
+        c.execute("ALTER TABLE treatments ADD COLUMN lining_material TEXT DEFAULT 'Espuma Plastazote Hipoalergénica'")
+    if "closure_type" not in t_cols:
+        c.execute("ALTER TABLE treatments ADD COLUMN closure_type TEXT DEFAULT 'Velcro con Hebilla de Seguridad'")
+    if "color_pattern" not in t_cols:
+        c.execute("ALTER TABLE treatments ADD COLUMN color_pattern TEXT DEFAULT 'Blanco Médico Estándar'")
+    if "clinical_priority" not in t_cols:
+        c.execute("ALTER TABLE treatments ADD COLUMN clinical_priority TEXT DEFAULT 'Normal'")
+    if "target_delivery_date" not in t_cols:
+        c.execute("ALTER TABLE treatments ADD COLUMN target_delivery_date TEXT")
+    if "in_fabrication_at" not in t_cols:
+        c.execute("ALTER TABLE treatments ADD COLUMN in_fabrication_at TEXT")
+    if "completed_at" not in t_cols:
+        c.execute("ALTER TABLE treatments ADD COLUMN completed_at TEXT")
 
     # Migración de columnas de Facturación SRI en billing_invoices
     c.execute("PRAGMA table_info(billing_invoices)")

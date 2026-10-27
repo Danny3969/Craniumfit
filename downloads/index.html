@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CraniumFit Mobile - Centro de Descargas e Instalación</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #070D18;
+      --card-bg: rgba(15, 23, 42, 0.75);
+      --card-border: rgba(56, 189, 248, 0.15);
+      --card-hover: rgba(56, 189, 248, 0.25);
+      --primary: #0EA5E9;
+      --primary-glow: rgba(14, 165, 233, 0.35);
+      --teal: #0D9488;
+      --cyan: #06B6D4;
+      --emerald: #10B981;
+      --amber: #F59E0B;
+      --purple: #8B5CF6;
+      --text: #F8FAFC;
+      --text-muted: #94A3B8;
+      --text-dim: #64748B;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Ambient background lights */
+    body::before {
+      content: "";
+      position: fixed;
+      top: -200px;
+      left: 20%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(14, 165, 233, 0.18) 0%, rgba(7, 13, 24, 0) 70%);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      bottom: -150px;
+      right: 15%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(13, 148, 136, 0.15) 0%, rgba(7, 13, 24, 0) 70%);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .container {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 40px 20px 80px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .brand-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border-radius: 9999px;
+      background: rgba(14, 165, 233, 0.1);
+      border: 1px solid rgba(14, 165, 233, 0.3);
+      color: var(--cyan);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      box-shadow: 0 0 20px rgba(14, 165, 233, 0.15);
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--emerald);
+      box-shadow: 0 0 10px var(--emerald);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.3); }
+    }
+
+    h1 {
+      font-size: clamp(32px, 5vw, 46px);
+      font-weight: 800;
+      line-height: 1.15;
+      background: linear-gradient(135deg, #FFFFFF 30%, #BAE6FD 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 14px;
+    }
+
+    .subtitle {
+      font-size: clamp(15px, 2vw, 18px);
+      color: var(--text-muted);
+      max-width: 680px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* Quick Scan Hero Banner */
+    .hero-banner {
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(30, 41, 59, 0.5) 100%);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 24px 30px;
+      margin-bottom: 40px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(12px);
+    }
+
+    .hero-info {
+      flex: 1;
+      min-width: 280px;
+    }
+
+    .hero-title {
+      font-size: 19px;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    .hero-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .url-copy-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 8px 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: var(--cyan);
+      margin-top: 10px;
+      max-width: 100%;
+      overflow-x: auto;
+    }
+
+    .copy-btn {
+      background: rgba(14, 165, 233, 0.2);
+      border: 1px solid rgba(14, 165, 233, 0.4);
+      color: #BAE6FD;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .copy-btn:hover {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    /* Apps Grid */
+    .apps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 28px;
+      margin-bottom: 54px;
+    }
+
+    .app-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 32px 28px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    }
+
+    .app-card:hover {
+      border-color: var(--card-hover);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 25px var(--primary-glow);
+    }
+
+    .app-badge-role {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      padding: 5px 12px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-familias {
+      background: rgba(14, 165, 233, 0.15);
+      color: #38BDF8;
+      border: 1px solid rgba(14, 165, 233, 0.3);
+    }
+
+    .badge-pro {
+      background: rgba(139, 92, 246, 0.15);
+      color: #A78BFA;
+      border: 1px solid rgba(139, 92, 246, 0.3);
+    }
+
+    .app-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .app-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      flex-shrink: 0;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    .icon-familias {
+      background: linear-gradient(135deg, #0284C7 0%, #0D9488 100%);
+    }
+
+    .icon-pro {
+      background: linear-gradient(135deg, #6366F1 0%, #0284C7 100%);
+    }
+
+    .app-title-group h2 {
+      font-size: 22px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.2;
+    }
+
+    .app-pkg {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-top: 3px;
+    }
+
+    .app-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.55;
+      margin-bottom: 20px;
+    }
+
+    .app-features {
+      list-style: none;
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .app-features li {
+      font-size: 13px;
+      color: #CBD5E1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .app-features li svg {
+      width: 16px;
+      height: 16px;
+      color: var(--emerald);
+      flex-shrink: 0;
+    }
+
+    /* QR Code Area */
+    .qr-container {
+      background: #FFFFFF;
+      border-radius: 16px;
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .qr-container img {
+      width: 160px;
+      height: 160px;
+      display: block;
+    }
+
+    .qr-caption {
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-dim);
+      margin-top: -16px;
+      margin-bottom: 20px;
+    }
+
+    /* Action Buttons */
+    .btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: auto;
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 20px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+      width: 100%;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #0284C7 0%, #0EA5E9 100%);
+      color: #fff;
+      box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #0369A1 0%, #0284C7 100%);
+      box-shadow: 0 6px 20px rgba(14, 165, 233, 0.45);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #E2E8F0;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(51, 65, 85, 0.9);
+      border-color: rgba(255, 255, 255, 0.25);
+      color: #fff;
+    }
+
+    /* Tabs & Instructions */
+    .instructions-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 36px 32px;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    }
+
+    .instructions-card h3 {
+      font-size: 24px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .instructions-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 12px;
+      margin-bottom: 24px;
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .tab-btn.active {
+      background: rgba(14, 165, 233, 0.15);
+      color: var(--cyan);
+      box-shadow: 0 0 12px rgba(14, 165, 233, 0.2);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .step-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .step-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .step-number {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(14, 165, 233, 0.15);
+      border: 1px solid rgba(14, 165, 233, 0.3);
+      color: var(--cyan);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .step-text h4 {
+      font-size: 15px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .step-text p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 0;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      margin-top: 60px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 13px;
+      color: var(--text-dim);
+    }
+
+    @media (max-width: 640px) {
+      .apps-grid {
+        grid-template-columns: 1fr;
+      }
+      .hero-banner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <div class="brand-badge">
+        <span class="pulse-dot"></span>
+        CraniumFit Core Mobile Release
+      </div>
+      <h1>Centro de Descarga e Instalación Móvil</h1>
+      <p class="subtitle">
+        Descarga directamente los archivos APK para Android o accede y añade a tu pantalla de inicio las aplicaciones móviles en tu iPhone o tablet.
+      </p>
+    </header>
+
+    <!-- Quick Scan Banner -->
+    <div class="hero-banner">
+      <div class="hero-info">
+        <div class="hero-title">
+          <span>📱</span> Acceso Directo desde tu Celular
+        </div>
+        <p class="hero-desc">
+          Para abrir este centro de descargas directamente en tu teléfono, escanea este código o copia la URL:
+        </p>
+        <div class="url-copy-box">
+          <span id="hubUrl">https://tar-prep-evanescence-bullet.trycloudflare.com/downloads/</span>
+          <button class="copy-btn" onclick="copyText('hubUrl')">Copiar</button>
+        </div>
+      </div>
+      <div style="background:#fff; padding:8px; border-radius:12px; display:inline-block;">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=https://tar-prep-evanescence-bullet.trycloudflare.com/downloads/" alt="QR Centro Descargas" style="display:block; width:110px; height:110px;">
+      </div>
+    </div>
+
+    <!-- Applications Grid -->
+    <div class="apps-grid">
+      
+      <!-- Card 1: CraniumFit Familias -->
+      <div class="app-card">
+        <span class="app-badge-role badge-familias">Padres / Pacientes</span>
+        
+        <div class="app-header">
+          <div class="app-icon icon-familias">👶</div>
+          <div class="app-title-group">
+            <h2>CraniumFit Familias</h2>
+            <div class="app-pkg">com.craniumfit.familias (v1.0.0)</div>
+          </div>
+        </div>
+
+        <p class="app-desc">
+          Diseñada para que los padres sigan el tratamiento de remodelación craneal de su bebé en tiempo real, registren horas de uso y reciban recetas digitales.
+        </p>
+
+        <ul class="app-features">
+          <li>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+            Registro con Validación OTP vía WhatsApp
+          </li>
+          <li>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+            Tracker de Uso Diario (Meta 23h) con alerta y racha
+          </li>
+          <li>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+            Curva de Evolución Biométrica (CVAI / IC) y 3D
+          </li>
+          <li>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+            Agendamiento de Citas con pago integrado
+          </li>
+          <li>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+            Recetas médicas y certificados firmados (.p12)
+          </li>
+          <li>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+            Guía de adaptación de 5 días y botón SOS WhatsApp
+          </li>
+        </ul>
+
+        <div class="qr-container">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=https://tar-prep-evanescence-bullet.trycloudflare.com/downloads/CraniumFit_Familias.apk" alt="QR CraniumFit Familias APK">
+        </div>
+        <div class="qr-caption">Escanea con la cámara para descargar APK</div>
+
+        <div class="btn-group">
+          <a href="/downloads/CraniumFit_Familias.apk" class="btn btn-primary" download>
+            <span>⬇️</span> Descargar APK Android (Nativo)
+          </a>
+          <a href="/app-familias/" class="btn btn-secondary" target="_blank">
+            <span>🌐</span> Abrir Web App / iPhone iOS
+          </a>
+        </div>
+      </div>
+
+      <!-- Card 2: CraniumFit Pro -->
+      <div class="app-card">
+        <span class="app-badge-role badge-pro">Médicos / Staff</span>
+        
+        <div class="app-header">
+          <div class="app-icon icon-pro">🩺</div>
+          <div class="app-title-group">
+            <h2>CraniumFit Pro</h2>
+            <div class="app-pkg">com.craniumfit.pro (v1.0.0)</div>
+          </div>
+        </div>
+
+        <p class="app-desc">
+          Aplicación clínica para Doctores, Secretarias y Administradores. Ingreso directo con credenciales asignadas por consola según el rol.
+        </p>
+
+        <ul class="app-features">
+          <li>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+            Acceso Directo con Credenciales (Sin OTP)
+          </li>
+          <li>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+            Doctores: Agenda en vivo, cambio de sede (Quito/Lima)
+          </li>
+          <li>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+            Calculadora Biométrica CVAI / IC ultrarrápida
+          </li>
+          <li>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+            Emisión y firmado digital .p12 de recetas médicas
+          </li>
+          <li>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+            Secretaría: Check-in de Sala de Espera y llamados
+          </li>
+          <li>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+            SuperAdmin: KPIs de facturación y alertas de bajo uso
+          </li>
+        </ul>
+
+        <div class="qr-container">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=https://tar-prep-evanescence-bullet.trycloudflare.com/downloads/CraniumFit_Pro.apk" alt="QR CraniumFit Pro APK">
+        </div>
+        <div class="qr-caption">Escanea con la cámara para descargar APK</div>
+
+        <div class="btn-group">
+          <a href="/downloads/CraniumFit_Pro.apk" class="btn btn-primary" download>
+            <span>⬇️</span> Descargar APK Android (Nativo)
+          </a>
+          <a href="/app-pro/" class="btn btn-secondary" target="_blank">
+            <span>🌐</span> Abrir Web App / iPhone iOS
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Instructions Tabs -->
+    <div class="instructions-card">
+      <h3>Instrucciones para Probar en tu Teléfono</h3>
+      <p>Selecciona tu dispositivo para ver los pasos guiados de instalación y prueba:</p>
+
+      <div class="tabs">
+        <button class="tab-btn active" onclick="showTab('tab-android', this)">📱 Android (.apk Nativo)</button>
+        <button class="tab-btn" onclick="showTab('tab-ios', this)">🍏 iPhone (iOS / PWA 10 seg)</button>
+        <button class="tab-btn" onclick="showTab('tab-expo', this)">⚡ Expo Go (Desarrollo)</button>
+      </div>
+
+      <!-- Android tab -->
+      <div id="tab-android" class="tab-content active">
+        <div class="step-list">
+          <div class="step-item">
+            <div class="step-number">1</div>
+            <div class="step-text">
+              <h4>Descarga el archivo APK</h4>
+              <p>Escanea el código QR de la aplicación correspondiente o pulsa el botón <strong>"Descargar APK Android"</strong> desde el navegador de tu teléfono.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-number">2</div>
+            <div class="step-text">
+              <h4>Abre el archivo descargado</h4>
+              <p>Toca la notificación de descarga finalizada o entra a la carpeta <em>Descargas / Archivos</em> de tu teléfono y pulsa sobre <code>CraniumFit_Familias.apk</code> o <code>CraniumFit_Pro.apk</code>.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-number">3</div>
+            <div class="step-text">
+              <h4>Permite la instalación de fuentes desconocidas</h4>
+              <p>Si Android muestra la advertencia de seguridad para instalar aplicaciones externas, pulsa <strong>"Configuración / Ajustes"</strong> y activa la casilla <strong>"Permitir desde esta fuente"</strong>.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-number">4</div>
+            <div class="step-text">
+              <h4>Instala y prueba la aplicación</h4>
+              <p>Pulsa <strong>"Instalar"</strong> y luego <strong>"Abrir"</strong>. La aplicación se comunicará directamente con el servidor CraniumFit en tiempo real.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- iOS tab -->
+      <div id="tab-ios" class="tab-content">
+        <div class="step-list">
+          <div class="step-item">
+            <div class="step-number">1</div>
+            <div class="step-text">
+              <h4>Abre el enlace en Safari</h4>
+              <p>En tu iPhone o iPad, abre Safari e ingresa a:<br>
+                • Familias: <a href="/app-familias/" style="color:var(--cyan);">https://tar-prep-evanescence-bullet.trycloudflare.com/app-familias/</a><br>
+                • Staff Pro: <a href="/app-pro/" style="color:var(--cyan);">https://tar-prep-evanescence-bullet.trycloudflare.com/app-pro/</a>
+              </p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-number">2</div>
+            <div class="step-text">
+              <h4>Toca el botón Compartir</h4>
+              <p>En la barra inferior de Safari, pulsa el icono de <strong>Compartir</strong> (el cuadrado con la flecha que apunta hacia arriba).</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-number">3</div>
+            <div class="step-text">
+              <h4>Selecciona "Añadir a pantalla de inicio"</h4>
+              <p>Desplázate hacia abajo en el menú de opciones y selecciona <strong>"Añadir a pantalla de inicio" (Add to Home Screen)</strong>.</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-number">4</div>
+            <div class="step-text">
+              <h4>Disfruta de la experiencia nativa</h4>
+              <p>La app se instalará en tu pantalla con su propio icono de CraniumFit, sin barras de navegador, con soporte táctil completo y rendimiento fluido de 60 FPS.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Expo Go tab -->
+      <div id="tab-expo" class="tab-content">
+        <div class="step-list">
+          <div class="step-item">
+            <div class="step-number">1</div>
+            <div class="step-text">
+              <h4>Instala Expo Go en tu teléfono</h4>
+              <p>Descarga gratis <strong>Expo Go</strong> desde Google Play Store (Android) o App Store (iPhone).</p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-number">2</div>
+            <div class="step-text">
+              <h4>Inicia el servidor Metro en la terminal</h4>
+              <p>Ejecuta en tu Mac dentro de la carpeta del proyecto:<br>
+                <code>cd mobile/craniumfit-familias && npx expo start --tunnel</code> o<br>
+                <code>cd mobile/craniumfit-pro && npx expo start --tunnel</code>
+              </p>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-number">3</div>
+            <div class="step-text">
+              <h4>Escanea el código QR de Metro</h4>
+              <p>Abre la app Expo Go en tu teléfono y escanea el código QR mostrado en la terminal para recarga instantánea en caliente (Hot Reload).</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <footer>
+      CraniumFit Medical Cloud Platform • Sistema Especializado de Remodelación Craneal 3D • Sedes Quito & Lima
+    </footer>
+  </div>
+
+  <script>
+    function showTab(tabId, el) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+      document.getElementById(tabId).classList.add('active');
+    }
+
+    function copyText(elemId) {
+      const text = document.getElementById(elemId).innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        alert('Enlace copiado al portapapeles: ' + text);
+      }).catch(err => {
+        prompt('Copia este enlace:', text);
+      });
+    }
+  </script>
+</body>
+</html>

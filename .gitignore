@@ -34,3 +34,41 @@ backend/data/*.db
 backend/uploads/signatures/*.p12
 backend/uploads/signatures/*.pfx
 !backend/uploads/signatures/.gitkeep
+
+# Mobile & Node Dependencies
+node_modules
+node_modules/
+**/node_modules
+**/node_modules/
+**/node_modules/**
+.expo/
+**/.expo/
+**/.expo/**
+dist/
+**/dist/
+web-build/
+**/web-build/
+.kotlin/
+**/.kotlin/
+
+# Android Native Builds & Intermediate Cache
+.gradle/
+**/.gradle/
+**/.gradle/**
+local.properties
+**/local.properties
+.cxx/
+**/.cxx/
+**/.cxx/**
+build/
+**/build/
+**/build/**
+android/
+**/android/
+**/android/**
+
+# Binarios grandes de compilación (GitHub rechaza archivos > 100MB)
+*.apk
+*.aab
+downloads/*.apk
+!downloads/index.html
